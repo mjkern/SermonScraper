@@ -44,6 +44,7 @@ class McLeanPres(Spider):
 
         # parse each sermon from the page
         all_sermons = response.xpath("//div[@class='sermon-list-content']")
+        all_sermons = all_sermons[0:2] # limit rows when testing
         results = []
         for sermon in all_sermons:
             # add the series info
@@ -56,10 +57,29 @@ class McLeanPres(Spider):
             sermon_data['sermon_link'] = sermon.xpath("./h3[@class='title']/a/@href").extract()[0]
             sermon_data['date'] = sermon.xpath("./div[@class='sermon-list-date']/text()").extract()[0].strip()
             sermon_data['speaker'] = sermon.xpath("./a[@class='more']/text()").extract()[0].strip()
-            results.append(sermon_data)
+
+            # add info from the page for this sermon
+            request = Request(sermon_data['sermon_link'], callback=self.parseSermon)
+            request.meta['sermon_data'] = sermon_data # put this in the request so it is usable in the callback
+
+            # save all the things we get from the next page
+            results.append(request)
         
         # we did it :)
         return results
+    
+    def parseSermon(self, response):
+        # grab the sermon info we scraped earlier
+        sermon_data = response.meta['sermon_data']
+
+        # add the sermon data from this page
+        sermon_data['audio_link'] = response.xpath("//div[@class='single-sermon-audio-download']/a[@class='more']/@href").extract()[0]
+        sermon_data['scripture'] = response.xpath("//div[@class='medium-6 cell']/p/text()").extract()[0]
+
+        # we did it :)
+        return sermon_data
+    
+
         
 
 
