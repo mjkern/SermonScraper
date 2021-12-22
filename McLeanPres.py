@@ -33,8 +33,6 @@ class McLeanPres(Spider):
             request.meta['series_data'] = series_data # put this into the request so it is accessible later
 
             # save all the things we got from the next pages
-            print(request)
-            print(request.meta)
             results.append(request)
 
         # we did it :)
