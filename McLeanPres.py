@@ -25,4 +25,4 @@ class McLeanPres(Spider):
             result['series_title'] = series.xpath("./text()").extract()
             result['series_link'] = series.xpath("./@href").extract()
             results.append(result)
-        return result
+        return results
