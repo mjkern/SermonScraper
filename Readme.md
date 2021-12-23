@@ -14,12 +14,12 @@ pipenv shell
 
 Then run the scraper
 ```
-scrapy runspider McLeanPres.py -o outfile.csv
+scrapy runspider McLeanPres.py -o output/outfile.csv
 ```
 
-Cleanup (if you don't want the new results to append to the old)
+Cleanup
 ```
-rm outfile.csv
+rm -r output
 ```
 
 # Dev Tips
