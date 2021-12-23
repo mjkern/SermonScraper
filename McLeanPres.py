@@ -30,7 +30,7 @@ class McLeanPres(Spider):
     def parse(self, response):
         # parse each series from the page
         all_series = response.xpath("//div[@class='cell']/h4/a")
-        all_series = all_series[0:2] # limit rows when testing
+        #all_series = all_series[0:2] # limit rows when testing
         results = []
         for series in all_series:
             # get the data on this page
@@ -60,7 +60,7 @@ class McLeanPres(Spider):
 
         # parse each sermon from the page
         all_sermons = response.xpath("//div[@class='sermon-list-content']")
-        all_sermons = all_sermons[0:2] # limit rows when testing
+        #all_sermons = all_sermons[0:2] # limit rows when testing
         results = []
         for sermon in all_sermons:
             # add the series info
