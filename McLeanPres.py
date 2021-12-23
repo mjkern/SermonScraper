@@ -1,5 +1,5 @@
 import os
-import wget
+import requests
 
 from scrapy.spiders import Spider
 from scrapy import Request
@@ -96,15 +96,10 @@ class McLeanPres(Spider):
 
         # download the sermon audio into the series folder
         sermon_data['sermon_filename'] = sanitize_filename(sermon_data['sermon_title'])
-        sermon_data['sermon_path'] = f"{sermon_data['series_path']}/{sermon_data['sermon_filename']}"
-        print(sermon_data['audio_link'])
-        wget.download(sermon_data['audio_link'], sermon_data['sermon_path'])
+        sermon_data['sermon_path'] = f"{sermon_data['series_path']}/{sermon_data['sermon_filename']}.mp3"
+        audio = requests.get(sermon_data['audio_link'])
+        with open(sermon_data['sermon_path'], 'wb') as sermon_file:
+            sermon_file.write(audio.content)
 
         # we did it :)
         return sermon_data
-    
-
-        
-
-
-
