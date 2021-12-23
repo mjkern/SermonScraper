@@ -1,5 +1,15 @@
+import os
+import wget
+
 from scrapy.spiders import Spider
 from scrapy import Request
+
+OUTPUT_PATH = "./output"
+SERIES_PATH = f"{OUTPUT_PATH}/series"
+
+def sanitize_filename(filename):
+    # taken from https://stackoverflow.com/questions/7406102/create-sane-safe-filename-from-any-unsafe-string
+    return "".join([c for c in filename if c.isalpha() or c.isdigit() or c==' ']).rstrip()
 
 class McLeanPres(Spider):
     """
@@ -42,6 +52,12 @@ class McLeanPres(Spider):
         # grab the result info from the first request so we can keep using it
         series_data = response.meta['series_data']
 
+        # create a folder to store all the sermons in this series
+        series_data['series_dirname'] = sanitize_filename(series_data['series_title'])
+        series_data['series_path'] = f"{SERIES_PATH}/{series_data['series_dirname']}"
+        if not os.path.exists(series_data['series_path']):
+            os.makedirs(series_data['series_path'])
+
         # parse each sermon from the page
         all_sermons = response.xpath("//div[@class='sermon-list-content']")
         all_sermons = all_sermons[0:2] # limit rows when testing
@@ -51,9 +67,11 @@ class McLeanPres(Spider):
             sermon_data = {}
             sermon_data['series_title'] = series_data['series_title']
             sermon_data['series_link'] = series_data['series_link']
+            sermon_data['series_dirname'] = series_data['series_dirname']
+            sermon_data['series_path'] = series_data['series_path']
 
             # get the data on this page
-            sermon_data['title'] = sermon.xpath("./h3[@class='title']/a/text()").extract()[0]
+            sermon_data['sermon_title'] = sermon.xpath("./h3[@class='title']/a/text()").extract()[0]
             sermon_data['sermon_link'] = sermon.xpath("./h3[@class='title']/a/@href").extract()[0]
             sermon_data['date'] = sermon.xpath("./div[@class='sermon-list-date']/text()").extract()[0].strip()
             sermon_data['speaker'] = sermon.xpath("./a[@class='more']/text()").extract()[0].strip()
@@ -75,6 +93,12 @@ class McLeanPres(Spider):
         # add the sermon data from this page
         sermon_data['audio_link'] = response.xpath("//div[@class='single-sermon-audio-download']/a[@class='more']/@href").extract()[0]
         sermon_data['scripture'] = response.xpath("//div[@class='medium-6 cell']/p/text()").extract()[0]
+
+        # download the sermon audio into the series folder
+        sermon_data['sermon_filename'] = sanitize_filename(sermon_data['sermon_title'])
+        sermon_data['sermon_path'] = f"{sermon_data['series_path']}/{sermon_data['sermon_filename']}"
+        print(sermon_data['audio_link'])
+        wget.download(sermon_data['audio_link'], sermon_data['sermon_path'])
 
         # we did it :)
         return sermon_data
