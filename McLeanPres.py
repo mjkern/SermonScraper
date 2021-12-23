@@ -74,7 +74,8 @@ class McLeanPres(Spider):
             sermon_data['sermon_title'] = sermon.xpath("./h3[@class='title']/a/text()").extract()[0]
             sermon_data['sermon_link'] = sermon.xpath("./h3[@class='title']/a/@href").extract()[0]
             sermon_data['date'] = sermon.xpath("./div[@class='sermon-list-date']/text()").extract()[0].strip()
-            sermon_data['speaker'] = sermon.xpath("./a[@class='more']/text()").extract()[0].strip()
+            sermon_data['speaker'] = sermon.xpath("./a[@class='more']/text()").extract()
+            sermon_data['speaker'] = sermon_data['speaker'][0].strip() if len(sermon_data['speaker']) else '[unknown]' # some sermons are not clearly listed
 
             # add info from the page for this sermon
             request = Request(sermon_data['sermon_link'], callback=self.parseSermon)
@@ -92,7 +93,8 @@ class McLeanPres(Spider):
 
         # add the sermon data from this page
         sermon_data['audio_link'] = response.xpath("//div[@class='single-sermon-audio-download']/a[@class='more']/@href").extract()[0]
-        sermon_data['scripture'] = response.xpath("//div[@class='medium-6 cell']/p/text()").extract()[0]
+        sermon_data['scripture'] = response.xpath("//div[@class='medium-6 cell']/p/text()").extract()
+        sermon_data['scripture'] = sermon_data['scripture'][0] if len(sermon_data['scripture']) else '[unknown]'
 
         # download the sermon audio into the series folder
         sermon_data['sermon_filename'] = sanitize_filename(sermon_data['sermon_title'])
