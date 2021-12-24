@@ -12,20 +12,16 @@ EXCEL_PATH = f"{OUTPUT_DIR}/McLean Pres Sermons.xlsx"
 def main():
     # get the csv of scraped data into a dataframe
     df = pd.read_csv('./output/outfile.csv')
-    df = df[0:20] # shorten df for testing
-    print(df.keys())
     
     # sort sermons by speaker, creating symlinks by series
     paths = df.apply(axis = 1, func = lambda row: organize_audio_file(row['sermon_path'], row['series_dirname'], sanitize_filename(row['speaker']), row['sermon_filename']))
 
     # drop columns we don't want in the final output
     df = df.drop(columns=['series_dirname', 'series_path', 'sermon_filename', 'sermon_path', 'audio_link'])
-    print(df.keys())
 
     # include the new paths
     df['path_by_speaker'] = paths.apply(lambda d: d['path_by_speaker'])
     df['path_by_series'] = paths.apply(lambda d: d['path_by_series'])
-    print(df.keys())
 
     # reorder the columns
     df = df.reindex(columns=[
@@ -39,9 +35,6 @@ def main():
         'path_by_speaker',
         'path_by_series'
     ])
-    print(df.keys())
-
-    print(df.head())
 
     # write to excel doc for easy use
     df.to_excel(EXCEL_PATH, index=False)
