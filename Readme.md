@@ -7,19 +7,31 @@ My Dad asked me to download a bunch of sermons for him for Christmas and I'm too
 
 # Usage
 
-When first opening the project
+## Before anything else
 ```
 pipenv shell
 ```
 
-Then run the scraper
+## Run the scraper
+Download all sermons and metadata
 ```
 scrapy runspider McLeanPres.py -o output/outfile.csv
 ```
 
-Cleanup
+Cleanup if you don't want the results
 ```
 rm -r output
+```
+
+## Run the organizer
+After you have run the scraper, organize the data into an easy-to-use format
+```
+python Organizer.py
+```
+
+Cleanup if you don't want the results
+```
+rm -r McLean\ Pres\ Sermons/
 ```
 
 # Dev Tips
