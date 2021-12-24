@@ -7,6 +7,7 @@ from Utilities import sanitize_filename
 OUTPUT_DIR = "./McLean Pres Sermons"
 BY_SPEAKER_DIR = f"{OUTPUT_DIR}/By Speaker"
 BY_SERIES_DIR = f"{OUTPUT_DIR}/By Series"
+EXCEL_PATH = f"{OUTPUT_DIR}/McLean Pres Sermons.xlsx"
 
 def main():
     # get the csv of scraped data into a dataframe
@@ -26,7 +27,24 @@ def main():
     df['path_by_series'] = paths.apply(lambda d: d['path_by_series'])
     print(df.keys())
 
+    # reorder the columns
+    df = df.reindex(columns=[
+        'sermon_title',
+        'speaker',
+        'scripture',
+        'series_title',
+        'date',
+        'sermon_link',
+        'series_link',
+        'path_by_speaker',
+        'path_by_series'
+    ])
+    print(df.keys())
+
     print(df.head())
+
+    # write to excel doc for easy use
+    df.to_excel(EXCEL_PATH, index=False)
 
 def organize_audio_file(sermon_path, series_dirname, speaker_dirname, sermon_filename):
     """
@@ -34,16 +52,15 @@ def organize_audio_file(sermon_path, series_dirname, speaker_dirname, sermon_fil
 
     Notes
      - real files by speaker because IDK if symlinks will actually work
-     - [:-4] is hacky but the easiest way to remove the ".mp3"
      - want sermons in their own subfolder so you can scroll through the names (instead of seek/skip)
      - symlinked sermons don't have their own subfolder beacuse seek/skip makes more sense here
     """
     
     # define the paths we want
-    dest_dir = f"{BY_SPEAKER_DIR}/{speaker_dirname}/{sermon_filename[:-4]}"
+    dest_dir = f"{BY_SPEAKER_DIR}/{speaker_dirname}/{sermon_filename}"
     link_dir = f"{BY_SERIES_DIR}/{series_dirname}"
-    dest_path = f"{dest_dir}/{sermon_filename}"
-    link_path = f"{link_dir}/{sermon_filename}"
+    dest_path = f"{dest_dir}/{sermon_filename}.mp3"
+    link_path = f"{link_dir}/{sermon_filename}.mp3"
 
     # ensure the paths exist
     os.makedirs(dest_dir)

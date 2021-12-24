@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e4381ec2ea831fdc454c887966d74121c297b5804a3e3cd4b4a224b5ee7a03d9"
+            "sha256": "2ac091c34c2937f298758d000a437e2c0a783b317b64b3bd49b8ad4484e4617f"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -140,6 +140,14 @@
                 "sha256:f95f8dedd925fd8f54edb3d2dfb44c190d9d18512377d3c1e2388d16126879bc"
             ],
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
+            "version": "==1.1.0"
+        },
+        "et-xmlfile": {
+            "hashes": [
+                "sha256:8eb9e2bc2f8c97e37a2dc85a09ecdcdec9d8a396530a6d5a33b30b9a92da0c5c",
+                "sha256:a2ba85d1d6a74ef63837eed693bcb89c3f752169b0e3e7ae5b16ca5e1b3deada"
+            ],
+            "markers": "python_version >= '3.6'",
             "version": "==1.1.0"
         },
         "h2": {
@@ -311,6 +319,14 @@
             "markers": "python_version < '3.10' and platform_machine != 'aarch64' and platform_machine != 'arm64'",
             "version": "==1.21.5"
         },
+        "openpyxl": {
+            "hashes": [
+                "sha256:40f568b9829bf9e446acfffce30250ac1fa39035124d55fc024025c41481c90f",
+                "sha256:8f3b11bd896a95468a4ab162fc4fcd260d46157155d1f8bfaabb99d88cfcf79f"
+            ],
+            "index": "pypi",
+            "version": "==3.0.9"
+        },
         "pandas": {
             "hashes": [
                 "sha256:1e4285f5de1012de20ca46b188ccf33521bff61ba5c5ebd78b4fb28e5416a9f1",
@@ -470,11 +486,11 @@
         },
         "setuptools": {
             "hashes": [
-                "sha256:4dcae26c87ddbd48275d24a8cb06c30b52503b2dd51619e3ec1bc63b45dacdea",
-                "sha256:8d1f26f7cc0c81b7b372b0d133bb8b1b0abbb36f2083cb4a474a8b64cede98a7"
+                "sha256:a4377723c53721515f72a3dfc1bfacdcd61edfa19a4cccf82e72e4f50d9cecbd",
+                "sha256:ad0ea3d172404abb14d8f7bd7f54f2ccd4ed9dd00c9da0b1398862e69eb22c03"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==60.0.5"
+            "version": "==60.1.0"
         },
         "six": {
             "hashes": [
