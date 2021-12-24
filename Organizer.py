@@ -1,6 +1,10 @@
+import pandas as pd
 
 def main():
-    print("Organizing all the things!")
+    # get the csv of scraped data into memory
+    data = pd.read_csv('./output/outfile.csv')
+    print(data)
+
 
 if __name__ == '__main__':
     main()
