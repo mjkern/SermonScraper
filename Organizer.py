@@ -15,7 +15,18 @@ def main():
     print(df.keys())
     
     # sort sermons by speaker, creating symlinks by series
-    df.apply(axis = 1, func = lambda row: organize_audio_file(row['sermon_path'], row['series_dirname'], sanitize_filename(row['speaker']), row['sermon_filename']))
+    paths = df.apply(axis = 1, func = lambda row: organize_audio_file(row['sermon_path'], row['series_dirname'], sanitize_filename(row['speaker']), row['sermon_filename']))
+
+    # drop columns we don't want in the final output
+    df = df.drop(columns=['series_dirname', 'series_path', 'sermon_filename', 'sermon_path', 'audio_link'])
+    print(df.keys())
+
+    # include the new paths
+    df['path_by_speaker'] = paths.apply(lambda d: d['path_by_speaker'])
+    df['path_by_series'] = paths.apply(lambda d: d['path_by_series'])
+    print(df.keys())
+
+    print(df.head())
 
 def organize_audio_file(sermon_path, series_dirname, speaker_dirname, sermon_filename):
     """
@@ -41,6 +52,9 @@ def organize_audio_file(sermon_path, series_dirname, speaker_dirname, sermon_fil
     # copy and link the files
     shutil.copy(sermon_path, dest_path)
     os.symlink(dest_path, link_path)
+
+    # return the paths
+    return {'path_by_speaker': dest_path, 'path_by_series': link_path}
 
 if __name__ == '__main__':
     main()
